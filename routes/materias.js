@@ -2,24 +2,18 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 
-
-// Nos trae todos los objetos que esten en la base de datos con sus atributos y objetos asociados con sus atributos.
-router.get("/", (req, res,next) => {
-  let paginaActual; 
-  let cantidadAVer; 
-
-  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
-  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
+router.get("/:paginaActual&:cantidad", (req, res,next) => {
 
   models.materia.findAll({
+    offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
+    limit: parseInt(req.params.cantidad),
+    
     attributes: ["id","nombre","comision","diaDeCursada","id_carrera"],
       include:[
         {as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]},
         {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]},
         {as:'Alumnos - Relacionados', model:models.alumnos, attributes: ["id","nombre","apellido","mail","dni","id_materia"]}
-      ],
-      offset: (paginaActual*cantidadAVer),
-      limit: cantidadAVer
+      ]
     }).then(materias => res.send(materias)).catch(error => { return next(error)});
 });
 
@@ -41,7 +35,7 @@ router.post("/", (req, res) => {
     });
 });
 
-// Encuenta la materia, con su objeto asociado y los atributos...
+
 const findmateria = (id, { onSuccess, onNotFound, onError }) => {
   models.materia
     .findOne({
@@ -63,7 +57,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// Modifica los atributos de los objetos
+
 router.put("/:id", (req, res) => {
   const onSuccess = materia =>
     materia
@@ -86,7 +80,7 @@ router.put("/:id", (req, res) => {
   });
 });
 
-// Borra un objeto con solo su id.
+
 router.delete("/:id", (req, res) => {
   const onSuccess = materia =>
     materia

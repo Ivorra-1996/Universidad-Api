@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 
-//Funciona 
+
 router.get("/:paginaActual&:cantidad", (req, res) => {
   models.carrera.findAll({
     offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
@@ -16,7 +16,7 @@ router.get("/:paginaActual&:cantidad", (req, res) => {
     }).then(carreras => res.send(carreras));
 });
 
-//Funciona 
+
 router.post("/", (req, res) => {
   models.carrera
     .create({ nombre: req.body.nombre, id_instituto: req.body.id_instituto })
@@ -43,7 +43,7 @@ const findCarrera = (id, { onSuccess, onNotFound, onError }) => {
     .catch(() => onError());
 };
 
-// Funciona 
+ 
 router.get("/:id", (req, res) => {
   findCarrera(req.params.id, {
     onSuccess: carrera => res.send(carrera),
@@ -52,7 +52,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-//funciona 
+ 
 router.put("/:id", (req, res) => {
   const onSuccess = carrera =>
     carrera
@@ -73,7 +73,7 @@ router.put("/:id", (req, res) => {
   });
 });
 
-// Funciona 
+
 router.delete("/:id", (req, res) => {
   const onSuccess = carrera =>
     carrera

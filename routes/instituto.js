@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 
-//Funca
+
 router.get("/:paginaActual&:cantidad", (req, res) => {
     models.instituto
       .findAll({
@@ -15,7 +15,6 @@ router.get("/:paginaActual&:cantidad", (req, res) => {
   });
   
 
-//Funciona 
 router.post("/", (req, res) => {
     models.instituto
       .create({ nombre: req.body.nombre, director: req.body.director }) //Agregar atributos
@@ -41,7 +40,7 @@ router.post("/", (req, res) => {
       .catch(() => onError());
   };
 
-  // Funca
+
   router.get("/:id", (req, res) => {
     findInstituto(req.params.id, {
       onSuccess: instituto => res.send(instituto),
@@ -50,7 +49,7 @@ router.post("/", (req, res) => {
     });
   });
   
-  //Funca
+
   router.put("/:id", (req, res) => {
     const onSuccess = instituto =>
     instituto
@@ -71,7 +70,7 @@ router.post("/", (req, res) => {
       onError: () => res.sendStatus(500)
     });
   });
-  //Funca
+
   router.delete("/:id", (req, res) => {
     const onSuccess = instituto =>
     instituto
