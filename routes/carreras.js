@@ -3,21 +3,17 @@ var router = express.Router();
 var models = require("../models");
 
 //Funciona 
-router.get("/", (req, res,next) => {
-  let paginaActual; 
-  let cantidadAVer; 
-
-  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
-  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
-
-  models.carrera.findAll({attributes: ["id","nombre","id_instituto"],
+router.get("/:paginaActual&:cantidad", (req, res) => {
+  models.carrera.findAll({
+    offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
+    limit: parseInt(req.params.cantidad),
+    
+    attributes: ["id","nombre","id_instituto"],
       /////////se agrega la asociacion 
-      include:[{as:'Instituto-Relacionado', model:models.instituto, attributes: ["id","nombre","director"]}],
+      include:[{as:'Instituto-Relacionado', model:models.instituto, attributes: ["id","nombre","director"]}]
       ////////////////////////////////
-      offset: (paginaActual*cantidadAVer),
-      limit: cantidadAVer
 
-    }).then(carreras => res.send(carreras)).catch(error => { return next(error)});
+    }).then(carreras => res.send(carreras));
 });
 
 //Funciona 
