@@ -4,13 +4,23 @@ var models = require("../models");
 
 //-> Falta agregar asociasion, del docente y del alumnos que estan en la misma tabla, se diferencia con el rol.
 router.get("/", (req, res,next) => {
+  let paginaActual; 
+  let cantidadAVer; 
+
+  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
+  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
+
+
   models.alumnos.findAll({attributes: ["id","nombre","apellido","mail","dni","id_materia"],
       /////////se agrega la asociacion 
     include:[{as:'Materia - Relacionada', model:models.materia, attributes: ["id","nombre","comision","diaDeCursada"]}
     ,
-    {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]}]
-    //////////// 
-    }).then(alumnos => res.send(alumnos)).catch(error => { return next(error)});
+    {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]}],
+    //////////////////  
+    offset: (paginaActual*cantidadAVer),
+    limit: cantidadAVer
+  
+  }).then(alumnos => res.send(alumnos)).catch(error => { return next(error)});
 });
 
 

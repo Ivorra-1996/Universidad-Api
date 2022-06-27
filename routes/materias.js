@@ -5,14 +5,21 @@ var models = require("../models");
 
 // Nos trae todos los objetos que esten en la base de datos con sus atributos y objetos asociados con sus atributos.
 router.get("/", (req, res,next) => {
-  models.materia.findAll({attributes: ["id","nombre","comision","diaDeCursada","id_carrera"],
+  let paginaActual; 
+  let cantidadAVer; 
 
+  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
+  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
+
+  models.materia.findAll({
+    attributes: ["id","nombre","comision","diaDeCursada","id_carrera"],
       include:[
         {as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]},
         {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]},
         {as:'Alumnos - Relacionados', model:models.alumnos, attributes: ["id","nombre","apellido","mail","dni","id_materia"]}
-      ] 
-          
+      ],
+      offset: (paginaActual*cantidadAVer),
+      limit: cantidadAVer
     }).then(materias => res.send(materias)).catch(error => { return next(error)});
 });
 

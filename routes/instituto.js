@@ -4,9 +4,18 @@ var models = require("../models");
 
 //Funca
 router.get("/", (req, res) => {
+  let paginaActual; 
+  let cantidadAVer; 
+
+  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
+  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
+
     models.instituto
       .findAll({
-        attributes: ["id", "nombre","director"]
+        attributes: ["id", "nombre","director"],
+        offset: (paginaActual*cantidadAVer),
+        limit: cantidadAVer
+
       })
       .then(instituto => res.send(instituto))
       .catch(() => res.sendStatus(500));

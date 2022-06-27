@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
 
   parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
   parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
-  console.log("Profesor corriendo");
 
   models.profesor
     .findAll({
