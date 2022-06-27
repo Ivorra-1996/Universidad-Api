@@ -3,19 +3,12 @@ var router = express.Router();
 var models = require("../models");
 
 //Funca
-router.get("/", (req, res) => {
-  let paginaActual; 
-  let cantidadAVer; 
-
-  parseInt(req.query.paginaActual) ? paginaActual = parseInt(req.query.paginaActual) : paginaActual = 0;
-  parseInt(req.query.cantidadAVer) ? cantidadAVer = parseInt(req.query.cantidadAVer) : cantidadAVer = 9999;
-
+router.get("/:paginaActual&:cantidad", (req, res) => {
     models.instituto
       .findAll({
-        attributes: ["id", "nombre","director"],
-        offset: (paginaActual*cantidadAVer),
-        limit: cantidadAVer
-
+        offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
+        limit: parseInt(req.params.cantidad),
+        attributes: ["id", "nombre","director"]
       })
       .then(instituto => res.send(instituto))
       .catch(() => res.sendStatus(500));
