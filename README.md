@@ -2,35 +2,37 @@
 Proyecto de generar una api
 
 
-Api paso a paso :
-<g-emoji class="g-emoji" alias="file_folder" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f4c1.png">📁</g-emoji> 
-
+# 😏 Como levantar una api paso a paso 😏
 
 # 1) clonar el código del repositorio:
     
-    url
+    https://github.com/Ivorra-1996/proyecto_api.git
 
-
-# Intalamos las dependecias :
-  Instalamos bcypt para el cifrado de la password :
-       npm i bcrypt
-       npm i fetch
-
-   Instalamos JWT :
-      npm i jsonwebtoken
-      npm i moment
-      npm i dotenv
-      
-# Otra opcion:
-    Instalar todas las dependencias requeridas de una vez, por linea de comando
+# 2) Entrar a Api\proyecto_api 📁:
+Ejemplo:
+     
+     C:\Users\jose_\Desktop> cd Api\proyecto_api
+    
+# 3) Realizar la instalación de sus dependencias >_:
+Instalar todas las dependencias requeridas de una vez, por linea de comando
      
      C:\Users\jose_\Desktop\Api\proyecto_api> npm install 
      C:\Users\jose_\Desktop\Api\proyecto_api> npm update
 
-# Agregamos las migraciones:
-     Ejecutar las migraciones -> estas son las creaciones de la base de datos que esta enlazada mediante una conexion previamente.
+# 4) Realizar la instalación de sequelize-cli >_:
+
+     C:\Users\jose_\Desktop\Api\proyecto_api> npm install sequelize-cli --save
+     
+# 5) Ejecutar las migraciones >_:
+Estas son las creaciones de la base de datos.
      
      C:\Users\jose_\Desktop\Api\proyecto_api> npx sequelize db:migrate
 
+# 6) Levantar la api >_:
 
-![stack Overflow](http://lmsotfy.com/so.png)
+     C:\Users\jose_\Desktop\Api\proyecto_api> npm start
+
+
+# MER:
+
+![MER de las entidades](https://raw.githubusercontent.com/Ivorra-1996/proyecto_api/main/mer.PNG)
