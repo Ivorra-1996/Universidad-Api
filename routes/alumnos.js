@@ -1,25 +1,23 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var validador = require('../routes/validador');
 
-//-> Falta agregar asociasion, del docente y del alumnos que estan en la misma tabla, se diferencia con el rol.
-router.get("/:paginaActual&:cantidad", (req, res) => {
+router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
   models.alumnos.findAll({
     offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
     limit: parseInt(req.params.cantidad),
     
     attributes: ["id","nombre","apellido","mail","dni","id_materia"],
       /////////se agrega la asociacion 
-    include:[{as:'Materia - Relacionada', model:models.materia, attributes: ["id","nombre","comision","diaDeCursada"]}
-    ,
-    {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]}]
+
     ////////////////// 
 
   }).then(alumnos => res.send(alumnos))
 });
 
 
-router.post("/", (req, res) => {
+router.post("/",validador.validarToken, (req, res) => {
     models.alumnos
       .create({ nombre: req.body.nombre, apellido: req.body.apellido, mail: req.body.mail,
         dni: req.body.dni,id_materia: req.body.id_materia })
@@ -39,8 +37,6 @@ const findalumnos = (id, { onSuccess, onNotFound, onError }) => {
     models.alumnos
       .findOne({
         attributes: ["id","nombre","apellido","mail","dni","id_materia"],
-        // Incluir o asoc. la materia.
-        /// include:[{as:'Instituto-Relacionado', model:models.instituto, attributes: ["id","nombre","director"]}],
         where: { id }
     })
     .then(alumnos => (alumnos ? onSuccess(alumnos) : onNotFound()))
@@ -48,7 +44,7 @@ const findalumnos = (id, { onSuccess, onNotFound, onError }) => {
 };
   
 
-router.get("/:id", (req, res) => {
+router.get("/:id",validador.validarToken, (req, res) => {
     findalumnos(req.params.id, {
       onSuccess: alumnos => res.send(alumnos),
       onNotFound: () => res.sendStatus(404),
@@ -57,7 +53,7 @@ router.get("/:id", (req, res) => {
 });
 
 //funciona 
-router.put("/:id", (req, res) => {
+router.put("/:id",validador.validarToken,(req, res) => {
     const onSuccess = alumnos =>
         alumnos
         .update({ nombre: req.body.nombre,apellido: req.body.apellido,mail: req.body.mail,dni: req.body.dni,
@@ -79,7 +75,7 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",validador.validarToken, (req, res) => {
     const onSuccess = alumnos =>
       alumnos
         .destroy()

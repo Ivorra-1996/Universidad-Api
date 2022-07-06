@@ -1,8 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var validador = require('../routes/validador');
 
-router.get("/:paginaActual&:cantidad", (req, res,next) => {
+router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res,next) => {
 
   models.materia.findAll({
     offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
@@ -19,7 +20,7 @@ router.get("/:paginaActual&:cantidad", (req, res,next) => {
 
 // Si que se repita su comision, tira error.
 // habria que ver el tema del error o si se puede atender errores nuevos. Porque uno sirve para la comision ya que es unica.
-router.post("/", (req, res) => {
+router.post("/",validador.validarToken, (req, res) => {
   models.materia
     .create({nombre: req.body.nombre,comision: req.body.comision,diaDeCursada: req.body.diaDeCursada,id_carrera:req.body.id_carrera })
     .then(materia => res.status(201).send(`OK -> ${materia.nombre} Comision: ${materia.comision}`))
@@ -41,7 +42,9 @@ const findmateria = (id, { onSuccess, onNotFound, onError }) => {
     .findOne({
       attributes: ["id", "nombre","comision","diaDeCursada","id_carrera"],
       /////////se agrega la asociacion 
-      include:[{as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]}]
+      include:[{as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]},
+      {as:'Profesor/es - Relacionado/s', model:models.profesor, attributes: ["id","nombre","apellido","email","id_materia"]},
+      {as:'Alumnos - Relacionados', model:models.alumnos, attributes: ["id","nombre","apellido","mail","dni","id_materia"]}]
       ////////////////////////////////
       ,where: { id }
     })
@@ -49,7 +52,7 @@ const findmateria = (id, { onSuccess, onNotFound, onError }) => {
     .catch(() => onError());
 };
 
-router.get("/:id", (req, res) => {
+router.get("/:id",validador.validarToken, (req, res) => {
   findmateria(req.params.id, {
     onSuccess: materia => res.send(materia),
     onNotFound: () => res.sendStatus(404),
@@ -58,7 +61,7 @@ router.get("/:id", (req, res) => {
 });
 
 
-router.put("/:id", (req, res) => {
+router.put("/:id",validador.validarToken, (req, res) => {
   const onSuccess = materia =>
     materia
       .update({ nombre: req.body.nombre,comision: req.body.comision,diaDeCursada: req.body.diaDeCursada,id_carrera: req.body.id_carrera }, 
@@ -81,7 +84,7 @@ router.put("/:id", (req, res) => {
 });
 
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",validador.validarToken, (req, res) => {
   const onSuccess = materia =>
     materia
       .destroy()

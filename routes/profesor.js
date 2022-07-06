@@ -1,21 +1,21 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var validador = require('../routes/validador');
 
-router.get("/:paginaActual&:cantidad", (req, res) => {
+router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
   models.profesor
     .findAll({
       offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
       limit: parseInt(req.params.cantidad),
 
-      attributes: ["id", "apellido", "nombre","email", "id_materia"],
-      include:[{as:'Materia - Relacionada', model:models.materia, attributes: ["id","nombre", "id_carrera"]}]
+      attributes: ["id", "apellido", "nombre","email", "id_materia"]
     })
     .then(profesor => res.send(profesor))
     .catch(() => res.sendStatus(500));
 });
 
-router.post("/", (req, res) => {
+router.post("/",validador.validarToken, (req, res) => {
     models.profesor
       .create({nombre: req.body.nombre,apellido: req.body.apellido,email: req.body.email,id_materia: req.body.id_materia})
       .then(profesor => res.status(201).send({ id: profesor.id }))
@@ -43,7 +43,7 @@ const findProfesor = (id, { onSuccess, onNotFound, onError }) => {
     .catch(() => onError());
 };
 
-router.get("/:id", (req, res) => {
+router.get("/:id",validador.validarToken, (req, res) => {
   findProfesor(req.params.id, {
     onSuccess: profesor => res.send(profesor),
     onNotFound: () => res.sendStatus(404),
@@ -52,7 +52,7 @@ router.get("/:id", (req, res) => {
 });
 
 //funciona 
-router.put("/:id", (req, res) => {
+router.put("/:id",validador.validarToken, (req, res) => {
   const onSuccess = profesor =>
       profesor
       .update({ nombre: req.body.nombre,apellido: req.body.apellido,email: req.body.email,id_materia: req.body.id_materia},
@@ -73,7 +73,7 @@ router.put("/:id", (req, res) => {
   });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",validador.validarToken, (req, res) => {
   const onSuccess = profesor =>
     profesor
       .destroy()

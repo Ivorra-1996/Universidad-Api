@@ -1,9 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var validador = require('../routes/validador');
 
-
-router.get("/:paginaActual&:cantidad", (req, res) => {
+router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
   models.carrera.findAll({
     offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
     limit: parseInt(req.params.cantidad),
@@ -17,7 +17,7 @@ router.get("/:paginaActual&:cantidad", (req, res) => {
 });
 
 
-router.post("/", (req, res) => {
+router.post("/",validador.validarToken, (req, res) => {
   models.carrera
     .create({ nombre: req.body.nombre, id_instituto: req.body.id_instituto })
     .then(carrera => res.status(201).send({ id: carrera.id }))
@@ -44,7 +44,7 @@ const findCarrera = (id, { onSuccess, onNotFound, onError }) => {
 };
 
  
-router.get("/:id", (req, res) => {
+router.get("/:id",validador.validarToken, (req, res) => {
   findCarrera(req.params.id, {
     onSuccess: carrera => res.send(carrera),
     onNotFound: () => res.sendStatus(404),
@@ -53,7 +53,7 @@ router.get("/:id", (req, res) => {
 });
 
  
-router.put("/:id", (req, res) => {
+router.put("/:id",validador.validarToken, (req, res) => {
   const onSuccess = carrera =>
     carrera
       .update({ nombre: req.body.nombre, id_instituto: req.body.id_instituto }, { fields: ["nombre","id_instituto"] })
@@ -74,7 +74,7 @@ router.put("/:id", (req, res) => {
 });
 
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",validador.validarToken, (req, res) => {
   const onSuccess = carrera =>
     carrera
       .destroy()

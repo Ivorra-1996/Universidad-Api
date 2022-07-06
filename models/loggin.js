@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   }, {});
   loggin.associate = function(models) {
-    // associations can be defined here
+    ///
   };
   return loggin;
 };
