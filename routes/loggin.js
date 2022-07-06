@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt'); // importamos para poder encriptar.
 const jwt = require('jsonwebtoken'); // importamos el json web token para ponerle un codigo a la api.
 require('dotenv').config('./.env');
 const secret = process.env.SECRET;
+const expireIn = process.env.EXPIRESIN;
 
 
 //Rutas loggin y registro
@@ -24,7 +25,7 @@ router.post('/signin', (req,res) => {
         //Verifica si existe el usuario o no.
         if (esValido) {
             // Creamos el token
-            let token = jwt.sign({loggin: loggin},secret,{expiresIn: "120s"});
+            let token = jwt.sign({loggin: loggin},secret,{expiresIn: expireIn});
             res.json({
                 usuario: loggin,
                 token: token
@@ -51,7 +52,7 @@ router.post('/singup', (req,res) => {
         password: password
     }).then(loggin => { 
         // Generamos el token!!.
-        let token = jwt.sign({usuario: loggin},secret,{expiresIn: "120s"});
+        let token = jwt.sign({usuario: loggin},secret,{expiresIn: expireIn});
         
         // Lo devolvemos como un objeto.
         res.json({
