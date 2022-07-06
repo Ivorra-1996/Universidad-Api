@@ -26,6 +26,7 @@ Instalar todas las dependencias requeridas de una vez, por linea de comando
 # 5) Ejecutar las migraciones >_:
 Estas son las creaciones de la base de datos.
      
+     C:\Users\jose_\Desktop\Api\proyecto_api> npx sequelize-cli model:generate --name loggin --attributes usuario:string,password:string
      C:\Users\jose_\Desktop\Api\proyecto_api> npx sequelize db:migrate
 
 # 6) Levantar la api >_:
