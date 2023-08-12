@@ -1,0 +1,4 @@
+Agregar:
+1_ Mejoras en codigo y estructura del proyecto.
+2_ Test(jest).
+3_ 

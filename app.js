@@ -9,8 +9,11 @@ var institutosRouter = require('./routes/instituto');
 var alumnosRouter = require('./routes/alumnos');
 var profesorRouter = require('./routes/profesor');
 var loggin = require('./routes/loggin');
+const port = require('./bin/www');
 
 var app = express();
+
+const url = "/Api/Universidad";
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,12 +26,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/car', carrerasRouter);
-app.use('/mat', materiasRouter);
-app.use('/inst', institutosRouter);
-app.use('/alum', alumnosRouter);
-app.use('/p', profesorRouter);
-app.use('/api',loggin);
+app.use(`${url}/carreras`, carrerasRouter);
+app.use('/materias', materiasRouter);
+app.use(`${url}/institutos`, institutosRouter);
+app.use('/alumnos', alumnosRouter);
+app.use('/profesores', profesorRouter);
+app.use('/loggin',loggin);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

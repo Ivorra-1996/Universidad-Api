@@ -8,7 +8,7 @@
     
     https://github.com/Ivorra-1996/proyecto_api.git
 
-### 2) Entrar a Api\proyecto_api 📁:
+### 2) Entrar al directorio Api 📁:
 Posicionate en tu directorio de Api.
 Ejemplo:
      
@@ -25,7 +25,7 @@ Instalar las dependencias necesarias, por linea de comando
      > npm install sequelize-cli --save
      
 ### 5) Ejecutar las migraciones >_:
-Estas son las creaciones de la base de datos.
+Estas son las creaciones de entidades y migraciones a la base de datos.
      
      C:\Users\jose_\Desktop\Api\proyecto_api> npx sequelize-cli model:generate --name loggin --attributes usuario:string,password:string
      C:\Users\jose_\Desktop\Api\proyecto_api> npx sequelize db:migrate

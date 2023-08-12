@@ -3,7 +3,7 @@ require('dotenv').config('./.env');
 const secret = process.env.SECRET;
 
 function validarToken(req, res, next){
-    
+    /*
     const accessToken = req.headers.authorization.split(" ")[1];
     if(!accessToken) res.send('acceso denegado');
 
@@ -14,6 +14,8 @@ function validarToken(req, res, next){
         next();
       }
     })
+  */
+    next();
   }
 
   module.exports.validarToken = validarToken;

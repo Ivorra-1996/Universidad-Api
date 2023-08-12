@@ -20,7 +20,17 @@ router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
 router.post("/",validador.validarToken, (req, res) => {
   models.carrera
     .create({ nombre: req.body.nombre, id_instituto: req.body.id_instituto })
-    .then(carrera => res.status(201).send({ id: carrera.id }))
+    .then(carrera => {
+      const formattedCarrera = {
+        id: carrera.id,
+        nombre: carrera.nombre,
+        id_instituto: carrera.id_instituto
+      };
+
+      const prettyFormattedCarrera = JSON.stringify(formattedCarrera, null, 2);
+
+      res.status(201).send(prettyFormattedCarrera);
+    })
     .catch(error => {
       if (error == "SequelizeUniqueConstraintError: Validation error") {
         res.status(400).send('Bad request: existe otra carrera con el mismo nombre')
