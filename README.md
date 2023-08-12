@@ -9,19 +9,20 @@
     https://github.com/Ivorra-1996/proyecto_api.git
 
 ### 2) Entrar a Api\proyecto_api 📁:
+Posicionate en tu directorio de Api.
 Ejemplo:
      
      C:\Users\jose_\Desktop> cd Api\proyecto_api
     
 #### 3) Realizar la instalación de sus dependencias >_:
-Instalar todas las dependencias requeridas de una vez, por linea de comando
+Instalar las dependencias necesarias, por linea de comando
      
-     C:\Users\jose_\Desktop\Api\proyecto_api> npm install 
-     C:\Users\jose_\Desktop\Api\proyecto_api> npm update
+     > npm install 
+     > npm update
 
 ### 4) Realizar la instalación de sequelize-cli >_:
 
-     C:\Users\jose_\Desktop\Api\proyecto_api> npm install sequelize-cli --save
+     > npm install sequelize-cli --save
      
 ### 5) Ejecutar las migraciones >_:
 Estas son las creaciones de la base de datos.
