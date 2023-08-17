@@ -5,8 +5,8 @@ const alumnosControllers = require('../controllers/alumno_controller.js');
 
 router
       .get("/:paginaActual&:cantidad", validador.validarToken, alumnosControllers.getAllAlumnos)
-      .post("/", validador.validarToken, alumnosControllers.createdAlumno)
       .get("/:id", validador.validarToken, alumnosControllers.getOneAlumno)
+      .post("/", validador.validarToken, alumnosControllers.createdAlumno)
       .put("/:id", validador.validarToken, alumnosControllers.updateAlumno)
       .delete("/:id", validador.validarToken, alumnosControllers.deleteAlumno);
 
