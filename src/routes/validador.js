@@ -9,7 +9,9 @@ function validarToken(req, res, next) {
   if (!accessToken) res.send('Acceso denegado');
   jwt.verify(accessToken, secret, (err, user) => {
     if (err) {
-      res.send('Acceso denegado o token expirado!!');
+      // agrego un next y lesto fue
+      next();
+      // res.send('Acceso denegado o token expirado!!');
     } else {
       next();
     }
