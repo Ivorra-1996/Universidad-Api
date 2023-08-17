@@ -30,8 +30,8 @@ app.use(`${urlV1}/carreras`, carrerasRouter);
 app.use(`${urlV1}/materias`, materiasRouter);
 app.use(`${urlV1}/institutos`, institutosRouter);
 app.use(`${urlV1}/alumnos`, alumnosRouter);
-
 app.use(`${urlV1}/profesores`, profesorRouter);
+
 app.use(`${urlV1}/loggin`, loggin);
 
 // catch 404 and forward to error handler
