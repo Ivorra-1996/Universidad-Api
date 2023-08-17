@@ -1,21 +1,19 @@
-var jwt = require('jsonwebtoken')
-require('dotenv').config('./.env');
-const secret = process.env.SECRET;
+require('dotenv').config();
 
-function validarToken(req, res, next){
-    /*
-    const accessToken = req.headers.authorization.split(" ")[1];
-    if(!accessToken) res.send('acceso denegado');
+var jwt = require('jsonwebtoken');
 
-    jwt.verify(accessToken, secret, (err, user) =>{
-      if(err){
-        res.send('acceso denegado o token expirado!!');
-      }else {
-        next();
-      }
-    })
-  */
-    next();
-  }
+const secret = "BD";
 
-  module.exports.validarToken = validarToken;
+function validarToken(req, res, next) {
+  const accessToken = req.headers.authorization.split(" ")[1];
+  if (!accessToken) res.send('Acceso denegado');
+  jwt.verify(accessToken, secret, (err, user) => {
+    if (err) {
+      res.send('Acceso denegado o token expirado!!');
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.validarToken = validarToken;

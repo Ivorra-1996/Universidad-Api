@@ -9,19 +9,29 @@ router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
       offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
       limit: parseInt(req.params.cantidad),
 
-      attributes: ["id", "apellido", "nombre","email", "id_materia"]
+      attributes: ["id","nombre","apellido","email", "id_materia"]
     })
     .then(profesor => res.send(profesor))
-    .catch(() => res.sendStatus(500));
+    .catch(() => res.status(500).send("Error en el servidor"));
 });
 
 router.post("/",validador.validarToken, (req, res) => {
     models.profesor
-      .create({nombre: req.body.nombre,apellido: req.body.apellido,email: req.body.email,id_materia: req.body.id_materia})
-      .then(profesor => res.status(201).send({ id: profesor.id }))
+      .create({
+        nombre: req.body.nombre, 
+        apellido: req.body.apellido,
+        email: req.body.email,
+        id_materia: req.body.id_materia
+      }).then(profesor => res.status(201).send({ 
+        id: profesor.id,
+        nombre: profesor.nombre,
+        apellido: profesor.apellido,
+        email: profesor.email,
+        id_materia: profesor.id_materia,
+      }))
       .catch(error => {
         if (error == "SequelizeUniqueConstraintError: Validation error") {
-          res.status(400).send('Bad request: existe otro profesor con el mismo email')
+          res.status(406).send('Ya existe una cuenta con esos datos')
         }
         else {
           console.log(`Error al intentar insertar en la base de datos: ${error}`)
@@ -46,8 +56,8 @@ const findProfesor = (id, { onSuccess, onNotFound, onError }) => {
 router.get("/:id",validador.validarToken, (req, res) => {
   findProfesor(req.params.id, {
     onSuccess: profesor => res.send(profesor),
-    onNotFound: () => res.sendStatus(404),
-    onError: () => res.sendStatus(500)
+    onNotFound: () => res.status(404).send("Usuario no encontrado"),
+    onError: () => res.status(500).send("Error en el servidor"),
   });
 });
 

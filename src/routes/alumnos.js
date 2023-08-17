@@ -1,27 +1,29 @@
 var express = require("express");
 var router = express.Router();
+
 var models = require("../models");
+
 var validador = require('../routes/validador');
+const alumnosControllers = require('../controllers/alumno_controller.js');
 
-router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
-  models.alumnos.findAll({
-    offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
-    limit: parseInt(req.params.cantidad),
-    
-    attributes: ["id","nombre","apellido","mail","dni","id_materia"],
-      /////////se agrega la asociacion 
+router.get("/:paginaActual&:cantidad", validador.validarToken, alumnosControllers.getAllAlumnos);
 
-    ////////////////// 
 
-  }).then(alumnos => res.send(alumnos))
-});
+
 
 
 router.post("/",validador.validarToken, (req, res) => {
     models.alumnos
       .create({ nombre: req.body.nombre, apellido: req.body.apellido, mail: req.body.mail,
         dni: req.body.dni,id_materia: req.body.id_materia })
-      .then(alumnos => res.status(201).send({ id: alumnos.id }))
+      .then(alumnos => res.status(201).send({ 
+        id: alumnos.id , 
+        nombre:alumnos.nombre, 
+        apellido:alumnos.apellido,
+        mail:alumnos.mail,
+        dni:alumnos.dni,
+        id_materia: alumnos.id_materia,
+      }))
       .catch(error => {
         if (error == "SequelizeUniqueConstraintError: Validation error") {
           res.status(400).send('Bad request: existe otro usuario con el mismo mail o dni')

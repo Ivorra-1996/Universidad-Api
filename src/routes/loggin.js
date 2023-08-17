@@ -4,41 +4,47 @@ const router = express.Router();
 //const {loggin} = require('../models/index'); // importa todos los modelos de DB que se encuentran dentro del archivo DB
 const bcrypt = require('bcrypt'); // importamos para poder encriptar.
 const jwt = require('jsonwebtoken'); // importamos el json web token para ponerle un codigo a la api.
-require('dotenv').config('./.env');
-const secret = process.env.SECRET;
-const expireIn = process.env.EXPIRESIN;
+require('dotenv').config('../.env');
 
+// const secret = process.env.SECRET;
+// const expireIn = process.env.EXPIRESIN;
+// Problemas con el secret y espireIN se instancian en undefined....
+const secret = "BD";
+const expireIn = "120s";
 
 //Rutas loggin y registro
-router.post('/signin', (req,res) => {
+router.post('/signin', async (req, res) => {
+    try {
+        const { usuario, password } = req.body;
 
-    models.loggin
-      .findOne({
-        attributes: ["id","usuario","password"],
-        where: { usuario: req.body.usuario }
-    })
-    .then(loggin => {
+        const loggin = await models.loggin.findOne({
+            attributes: ["id", "usuario", "password"],
+            where: { usuario: usuario }
+        });
 
-        // Si encuentra el usuario va a comparar la contraseña que tiene con la que le estan pasando por parametro.
-        const esValido = bcrypt.compareSync(req.body.password,loggin.password) && (req.body.usuario == loggin.usuario);
+        if (!loggin) {
+            return res.status(401).send("Usuario no encontrado");
+        }
 
-        //Verifica si existe el usuario o no.
+        const esValido = bcrypt.compareSync(password, loggin.password);
         if (esValido) {
-            // Creamos el token
-            let token = jwt.sign({loggin: loggin},secret,{expiresIn: expireIn});
+            console.log("Secreto: ",secret);
+            console.log("Expira: ", expireIn);
+            const token = jwt.sign({ loggin: loggin }, secret, { expiresIn: expireIn });
+            console.log(token);
             res.json({
                 usuario: loggin,
                 token: token
-            })
-        } 
-        else {
-            // Unauthorized Access
-            res.status(401).send("Contraseña o usuario incorrecto")
+            });
+        } else {
+            res.status(401).send("Contraseña incorrecta");
         }
-    }).catch(error => {
-        res.status(404).send(`No existe el usuario!!!!`);
-    })
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error interno del servidor");
+    }
 });
+
 
 
 router.post('/singup', (req,res) => {
@@ -60,14 +66,13 @@ router.post('/singup', (req,res) => {
             token:token
         });
     }).catch(error => {
-        if (error == "SequelizeUniqueConstraintError: Validation error") {
-          res.status(400).send('Nombre de usuario en uso')
+        if (error.name === "SequelizeUniqueConstraintError") {
+            res.status(400).send('Nombre de usuario en uso');
+        } else {
+            console.error(`Error al intentar insertar en la base de datos: ${error}`);
+            res.sendStatus(500);
         }
-        else {
-          console.log(`Error al intentar insertar en la base de datos: ${error}`)
-          res.sendStatus(500)
-        }
-      });
+    });    
 });
 
 router.get("/:paginaActual&:cantidad", (req, res) => {
@@ -75,7 +80,7 @@ router.get("/:paginaActual&:cantidad", (req, res) => {
       .findAll({
         offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),
         limit: parseInt(req.params.cantidad),
-        attributes: ["id", "usuario"]
+        attributes: ["id", "usuario","password"]
       })
       .then(loggin => res.send(loggin))
       .catch(() => res.sendStatus(500));
