@@ -3,6 +3,8 @@ var router = express.Router();
 var models = require("../models");
 var validador = require('../routes/validador');
 
+const materiaController = require('../controllers/materia_controller.js');
+
 router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res,next) => {
 
   models.materia.findAll({
