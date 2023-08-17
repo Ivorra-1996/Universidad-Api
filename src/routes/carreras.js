@@ -3,6 +3,8 @@ var router = express.Router();
 var models = require("../models");
 var validador = require('../routes/validador');
 
+const carreraControllers = require('../controllers/carrera_controller.js');
+
 router.get("/:paginaActual&:cantidad",validador.validarToken, (req, res) => {
   models.carrera.findAll({
     offset: (parseInt(req.params.paginaActual) * parseInt(req.params.cantidad)),

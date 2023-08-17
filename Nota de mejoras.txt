@@ -1,4 +1,4 @@
 Agregar:
 1_ Mejoras en codigo y estructura del proyecto.
 2_ Test(jest).
-3_ Generar un archivo aparte con los status.
+3_ Generar un archivo aparte con los res status o mensajes .

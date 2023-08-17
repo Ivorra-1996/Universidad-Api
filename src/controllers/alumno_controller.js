@@ -8,8 +8,6 @@ const getAllAlumnos = async (req, res) => {
         
         attributes: ["id","nombre","apellido","mail","dni","id_materia"],
           /////////se agrega la asociacion 
-    
-        ////////////////// 
          // Envías la respuesta al cliente
       }).then(alumnos => res.status(200).json({ message: 'Alumnos obtenidos correctamente', data: alumnos }))
 
@@ -118,8 +116,3 @@ module.exports = {
     updateAlumno,
     deleteAlumno
 };
-
-
-
-
-

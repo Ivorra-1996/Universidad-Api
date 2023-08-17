@@ -13,7 +13,7 @@ var loggin = require('./routes/loggin');
 
 var app = express();
 
-const url = "/Api/Universidad";
+const urlV1 = "/Api/Universidad";
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,12 +26,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(`${url}/carreras`, carrerasRouter);
-app.use(`${url}/materias`, materiasRouter);
-app.use(`${url}/institutos`, institutosRouter);
-app.use(`${url}/alumnos`, alumnosRouter);
-app.use(`${url}/profesores`, profesorRouter);
-app.use(`${url}/loggin`,loggin);
+app.use(`${urlV1}/carreras`, carrerasRouter);
+
+app.use(`${urlV1}/materias`, materiasRouter);
+app.use(`${urlV1}/institutos`, institutosRouter);
+
+app.use(`${urlV1}/alumnos`, alumnosRouter);
+
+app.use(`${urlV1}/profesores`, profesorRouter);
+app.use(`${urlV1}/loggin`, loggin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

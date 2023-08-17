@@ -1,6 +1,6 @@
-var express = require("express");
-var router = express.Router();
-var validador = require('../routes/validador');
+const express = require("express");
+const router = express.Router();
+const validador = require('../routes/validador');
 const alumnosControllers = require('../controllers/alumno_controller.js');
 
 router
