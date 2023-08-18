@@ -1,4 +1,4 @@
-var models = require("../models");
+const models = require("../models");
 
 const getAllAlumnos = async (req, res) => {
     try {  

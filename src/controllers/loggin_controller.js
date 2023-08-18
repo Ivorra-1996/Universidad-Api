@@ -23,8 +23,19 @@ const getAllLoggins = async (req, res) => {
 };
 
 const getOneLoggin = async (req,res) => {
+    const id = req.params.id;
+    try {
+        models.loggin.findOne({
+            attributes: ["id","usuario","password"],
+            where: {id}
+        }).then(loggin => ( loggin ? res.status(200).send(loggin) : res.status(404).send("NOT FOUND")));
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error interno del servidor");
+    }
 };
+
 
 const loggin = async (req, res) => {
     try {
@@ -91,11 +102,46 @@ const singupLoggin = async (req,res) => {
     });    
 };
 
-const updateLoggin = async (req,res) => {
-
+const updatePassword = async (req,res) => {
+    let password = bcrypt.hashSync(req.body.password,10);
+    const id = req.params.id;
+    const bodyLoggin = loggins =>
+            loggins
+                .update({ 
+                        password: password,
+                        },
+                        { fields: ["id","usuario","password"] })
+                .then(() => res.status(200).send("Password modificada!"))
+                .catch(error => {
+                        if (error == "SequelizeUniqueConstraintError: Validation error") {
+                            res.status(400).send('Bad request')
+                        }
+                        else {
+                            res.sendStatus(500).send(`Error al intentar actualizar la base de datos: ${error}`)
+                        }
+                    });
+    models.loggin.findOne(
+        {
+            attributes: ["id","usuario","password"],
+            where: {id}
+        }
+    ).then(loggin => (loggin ? bodyLoggin(loggin) : res.status(404).send("NOT FOUND")))
+    .catch(() => res.status(500));
 };
-const deleteLoggin = async (req,res) => {
 
+const deleteLoggin = async (req,res) => {
+    let id = req.params.id;
+    const destroy = loggin => 
+            loggin.destroy()
+            .then(() => res.status(200).send("Usuario eliminado"))
+            .catch(() => res.sendStatus(500));
+    models.loggin.findOne(
+        {
+            attributes: ["id","usuario","password"],
+            where: {id}
+        }
+    ).then(loggin => (loggin ? destroy(loggin) : res.status(404).send("NOT FOUND")))
+    .catch(() => res.status(500));
 };
 
 module.exports = {
@@ -103,6 +149,6 @@ module.exports = {
     getOneLoggin,
     loggin,
     singupLoggin,
-    updateLoggin,
+    updatePassword,
     deleteLoggin
 };

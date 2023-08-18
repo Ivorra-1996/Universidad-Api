@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var carrerasRouter = require('./routes/carreras');
-var materiasRouter = require('./routes/materias');
-var institutosRouter = require('./routes/instituto');
-var alumnosRouter = require('./routes/alumnos');
-var profesorRouter = require('./routes/profesor');
-var loggin = require('./routes/loggin');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const carrerasRouter = require('./routes/carreras');
+const materiasRouter = require('./routes/materias');
+const institutosRouter = require('./routes/instituto');
+const alumnosRouter = require('./routes/alumnos');
+const profesorRouter = require('./routes/profesor');
+const loggin = require('./routes/loggin');
 
 
-var app = express();
+const app = express();
 
 const urlV1 = "/Api/Universidad";
 
@@ -31,7 +31,6 @@ app.use(`${urlV1}/materias`, materiasRouter);
 app.use(`${urlV1}/institutos`, institutosRouter);
 app.use(`${urlV1}/alumnos`, alumnosRouter);
 app.use(`${urlV1}/profesores`, profesorRouter);
-
 app.use(`${urlV1}/loggin`, loggin);
 
 // catch 404 and forward to error handler

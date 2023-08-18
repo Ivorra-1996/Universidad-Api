@@ -1,5 +1,5 @@
 require('dotenv').config();
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET || "BD"; // Usamos el valor de .env o un valor por defecto
 
 function validarToken(req, res, next) {
